@@ -13,6 +13,7 @@ class DeleteBookingRequest(BaseRequest):
         return {"booking_id": self.booking_id, "token": self.token}
 
     @classmethod
-    def invalid(cls) -> "DeleteBookingRequest":
-        """Returns a DeleteBookingRequest with invalid data for negative tests."""
-        return cls(booking_id=-1, token="invalidtoken")
+    def non_existent(cls, token: str) -> "DeleteBookingRequest":
+        """Returns a DeleteBookingRequest for a non-existent booking ID for negative tests."""
+        from api_testing_framework.src.factories.booking_factory import BookingFactory
+        return cls(booking_id=BookingFactory.non_existent_booking_id(), token=token)

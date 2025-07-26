@@ -1,10 +1,9 @@
 from api_testing_framework.src.api_client import APIClient
 from api_testing_framework.src.request_objects.get_booking_request import GetBookingRequest
 from api_testing_framework.src.request_objects.auth_request import AuthRequest
-from api_testing_framework.src.request_objects.get_all_bookings_request import GetAllBookingsRequest
 from api_testing_framework.src.request_objects.delete_booking_request import DeleteBookingRequest
 from api_testing_framework.src.factories.auth_factory import AuthFactory
-import pytest
+from api_testing_framework.src.factories.booking_factory import BookingFactory
 
 api_client = APIClient()
 
@@ -23,6 +22,7 @@ class TestNegativeE2E:
             assert response.json().get("reason") == "Bad credentials"
 
     def test_delete_non_existent_booking(self) -> None:
-        delete_request = DeleteBookingRequest(booking_id=999999, token="invalidtoken")
+        token = AuthFactory.create_auth_token()
+        delete_request = BookingFactory.delete_non_existent_booking_request(token)
         response = api_client.delete(delete_request)
-        assert response.status_code == 403
+        assert response.status_code in (404, 405)
