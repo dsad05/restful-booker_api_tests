@@ -1,12 +1,21 @@
 from api_testing_framework.src.api_client import APIClient
 from api_testing_framework.src.request_objects.get_booking_request import GetBookingRequest
+from api_testing_framework.src.request_objects.auth_request import AuthRequest
+from api_testing_framework.src.factories.auth_factory import AuthFactory
 import pytest
 
 api_client = APIClient()
 
 class TestNegativeE2E:
-    def test_get_non_existent_booking(self):
-        non_existent_booking_id = 999999  # Assuming this ID does not exist
-        get_booking_request = GetBookingRequest(booking_id=non_existent_booking_id)
-        response = api_client.get(get_booking_request.path, headers=get_booking_request.headers)
+    def test_get_non_existent_booking(self) -> None:
+        get_booking_request = GetBookingRequest.invalid()
+        response = api_client.get(get_booking_request)
         assert response.status_code == 404
+
+    def test_login_with_invalid_credentials(self) -> None:
+        invalid_auth_data = AuthFactory.create_invalid_auth_data()
+        auth_request = AuthRequest(**invalid_auth_data.to_dict())
+        response = api_client.post(auth_request)
+        assert response.status_code == 200
+        if response.status_code == 200:
+            assert response.json().get("reason") == "Bad credentials"
