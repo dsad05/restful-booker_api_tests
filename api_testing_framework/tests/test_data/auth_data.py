@@ -1,4 +1,8 @@
 class AuthData:
+    """
+    Data object for authentication credentials.
+    """
+
     def __init__(self, username: str, password: str):
         self.username: str = username
         self.password: str = password
@@ -8,8 +12,3 @@ class AuthData:
             "username": self.username,
             "password": self.password
         }
-
-AUTH_DATA: AuthData = AuthData(
-    username="admin",
-    password="password123"
-)

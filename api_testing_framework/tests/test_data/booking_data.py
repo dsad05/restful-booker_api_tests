@@ -1,4 +1,7 @@
 class BookingData:
+    """
+    Data object for booking information used in API tests.
+    """
     def __init__(
         self,
         firstname: str,
@@ -28,6 +31,7 @@ class BookingData:
             "additionalneeds": self.additionalneeds
         }
 
+# Default valid booking data for tests
 DEFAULT_BOOKING: BookingData = BookingData(
     firstname="Jim",
     lastname="Brown",
@@ -38,6 +42,7 @@ DEFAULT_BOOKING: BookingData = BookingData(
     additionalneeds="Breakfast"
 )
 
+# Updated booking data for update tests
 UPDATED_BOOKING: BookingData = BookingData(
     firstname="James",
     lastname="Brown",
@@ -48,6 +53,7 @@ UPDATED_BOOKING: BookingData = BookingData(
     additionalneeds="Dinner"
 )
 
+# Default E2E booking data
 E2E_DEFAULT_BOOKING: BookingData = BookingData(
     firstname="E2E_Jim",
     lastname="E2E_Brown",
@@ -58,6 +64,7 @@ E2E_DEFAULT_BOOKING: BookingData = BookingData(
     additionalneeds="Parking"
 )
 
+# Updated E2E booking data
 E2E_UPDATED_BOOKING: BookingData = BookingData(
     firstname="E2E_James",
     lastname="E2E_Brown",
