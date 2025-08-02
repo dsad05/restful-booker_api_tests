@@ -25,7 +25,7 @@ def booking_id(auth_token: str) -> Generator[int, None, None]:
     create_booking_request = CreateBookingRequest(**booking_data.to_dict())
     response = api_client.post(create_booking_request)
     assert response.status_code == 200
-    booking_id = response.json()["bookingid"]
+    booking_id: int = response.json()["bookingid"]
     yield booking_id
     # Cleanup: delete booking after tests
     delete_booking_request = DeleteBookingRequest(booking_id=booking_id, token=auth_token)

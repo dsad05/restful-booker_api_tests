@@ -1,3 +1,6 @@
+from typing import Dict, Any
+
+
 class BookingData:
     """
     Data object for booking information used in API tests.
@@ -11,7 +14,7 @@ class BookingData:
         checkin: str,
         checkout: str,
         additionalneeds: str
-    ):
+    ) -> None:
         self.firstname: str = firstname
         self.lastname: str = lastname
         self.totalprice: int = totalprice
@@ -20,7 +23,7 @@ class BookingData:
         self.checkout: str = checkout
         self.additionalneeds: str = additionalneeds
 
-    def to_dict(self) -> dict[str, str | int | bool]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "firstname": self.firstname,
             "lastname": self.lastname,
