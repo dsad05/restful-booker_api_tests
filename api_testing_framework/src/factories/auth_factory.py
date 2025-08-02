@@ -1,4 +1,4 @@
-from api_testing_framework.tests.test_data.auth_data import AuthData
+from api_testing_framework.src.models.auth_model import AuthData
 
 class AuthFactory:
     @staticmethod

@@ -23,7 +23,7 @@ def auth_token() -> str:
 @pytest.fixture(scope="function")
 def create_and_delete_booking() -> Generator[int, None, None]:
     booking_data = BookingFactory.create_default_booking()
-    create_booking_request = CreateBookingRequest(**booking_data)
+    create_booking_request = CreateBookingRequest(**booking_data.to_dict())
     response = api_client.post(create_booking_request)
     assert response.status_code == 200
     booking_id = response.json()["bookingid"]
@@ -52,7 +52,8 @@ def test_get_booking_by_id(create_and_delete_booking: int) -> None:
     get_booking_request = GetBookingRequest(booking_id=booking_id)
     response = api_client.get(get_booking_request)
     assert response.status_code == 200
-    assert response.json()["firstname"] == BookingFactory.create_default_booking()["firstname"]
+    default_booking_data = BookingFactory.create_default_booking()
+    assert response.json()["firstname"] == default_booking_data.firstname
 
 def test_update_booking(create_and_delete_booking: int, auth_token: str) -> None:
     booking_id = create_and_delete_booking
@@ -60,11 +61,11 @@ def test_update_booking(create_and_delete_booking: int, auth_token: str) -> None
     update_booking_request = UpdateBookingRequest(
         booking_id=booking_id,
         token=auth_token,
-        **updated_booking_data
+        **updated_booking_data.to_dict()
     )
     update_response = api_client.put(update_booking_request)
     assert update_response.status_code == 200
-    assert update_response.json()["firstname"] == updated_booking_data["firstname"]
+    assert update_response.json()["firstname"] == updated_booking_data.firstname
 
 def test_delete_booking(create_and_delete_booking: int, auth_token: str) -> None:
     booking_id = create_and_delete_booking

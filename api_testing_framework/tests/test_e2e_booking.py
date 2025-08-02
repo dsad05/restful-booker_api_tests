@@ -22,7 +22,7 @@ def auth_token() -> str:
 @pytest.fixture(scope="module")
 def booking_id(auth_token: str) -> Generator[int, None, None]:
     booking_data = BookingFactory.create_e2e_default_booking()
-    create_booking_request = CreateBookingRequest(**booking_data)
+    create_booking_request = CreateBookingRequest(**booking_data.to_dict())
     response = api_client.post(create_booking_request)
     assert response.status_code == 200
     booking_id = response.json()["bookingid"]
@@ -40,20 +40,20 @@ class TestBookingE2E:
         response = api_client.get(get_booking_request)
         default_booking_data = BookingFactory.create_e2e_default_booking()
         assert response.status_code == 200
-        assert response.json()["firstname"] == default_booking_data["firstname"]
-        assert response.json()["lastname"] == default_booking_data["lastname"]
+        assert response.json()["firstname"] == default_booking_data.firstname
+        assert response.json()["lastname"] == default_booking_data.lastname
 
     def test_update_booking(self, booking_id: int, auth_token: str) -> None:
         updated_booking_data = BookingFactory.create_e2e_updated_booking()
         update_booking_request = UpdateBookingRequest(
             booking_id=booking_id,
             token=auth_token,
-            **updated_booking_data
+            **updated_booking_data.to_dict()
         )
         response = api_client.put(update_booking_request)
         assert response.status_code == 200
-        assert response.json()["firstname"] == updated_booking_data["firstname"]
-        assert response.json()["additionalneeds"] == updated_booking_data["additionalneeds"]
+        assert response.json()["firstname"] == updated_booking_data.firstname
+        assert response.json()["additionalneeds"] == updated_booking_data.additionalneeds
 
     def test_delete_booking(self, booking_id: int, auth_token: str) -> None:
         delete_booking_request = DeleteBookingRequest(booking_id=booking_id, token=auth_token)
